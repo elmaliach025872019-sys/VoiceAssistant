@@ -10,24 +10,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    # 1. הורדת קוד הפרויקט מהמאגר
+    - name: Checkout code
+      uses: actions/checkout@v4
 
+    # 2. הגדרת סביבת Java 17
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
 
+    # 3. מתן הרשאות הרצה לקובץ ה-gradlew
     - name: Grant execute permission for gradlew
-      working-directory: VoiceAssistant
       run: chmod +x gradlew
 
+    # 4. בניית קובץ ה-APK
     - name: Build Debug APK
-      working-directory: VoiceAssistant
       run: ./gradlew assembleDebug
 
+    # 5. העלאת קובץ ה-APK המוכן להורדה
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: VoiceAssistant/app/build/outputs/apk/debug/app-debug.apk
+        path: app/build/outputs/apk/debug/app-debug.apk
